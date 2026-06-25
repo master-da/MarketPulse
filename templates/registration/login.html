@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Sign in · MarketPulse{% endblock %}
+{% block body_class %}auth-body{% endblock %}
+{% block main_class %}auth-wrap{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+  <div class="auth-head">
+    <span class="brand-pulse big"></span>
+    <h1>Market<strong>Pulse</strong></h1>
+    <p class="muted">Real-time trading simulator</p>
+  </div>
+
+  {% if form.errors %}
+    <div class="alert">Invalid username or password. Try again.</div>
+  {% endif %}
+
+  <form method="post" class="auth-form">
+    {% csrf_token %}
+    <label>Username</label>
+    <input type="text" name="username" class="form-input" autofocus required>
+    <label>Password</label>
+    <input type="password" name="password" class="form-input" required>
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+  </form>
+
+  <div class="auth-demo">
+    <p class="muted">Demo account</p>
+    <code>demo&nbsp;/&nbsp;demo12345</code>
+  </div>
+
+  <p class="auth-alt">No account? <a href="{% url 'signup' %}">Create one</a></p>
+</div>
+{% endblock %}

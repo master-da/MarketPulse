@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MarketPulse{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body class="{% block body_class %}{% endblock %}">
+  <header class="topbar">
+    <a href="{% url 'dashboard' %}" class="brand">
+      <span class="brand-pulse"></span> Market<strong>Pulse</strong>
+    </a>
+    {% if user.is_authenticated %}
+    <div class="topbar-status">
+      <span id="engine-indicator" class="engine-dot" title="Market engine"></span>
+      <span id="engine-label" class="muted">connecting…</span>
+    </div>
+    <nav class="topbar-nav">
+      <span class="muted">Signed in as</span>
+      <strong>{{ user.username }}</strong>
+      <a href="/admin/" class="btn btn-ghost btn-sm">Admin</a>
+      <form action="{% url 'logout' %}" method="post" style="display:inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-ghost btn-sm">Log out</button>
+      </form>
+    </nav>
+    {% endif %}
+  </header>
+
+  <main class="{% block main_class %}page{% endblock %}">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% if user.is_authenticated %}
+  <script>window.CSRF_TOKEN = "{{ csrf_token }}";</script>
+  {% endif %}
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

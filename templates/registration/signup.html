@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Sign up · MarketPulse{% endblock %}
+{% block body_class %}auth-body{% endblock %}
+{% block main_class %}auth-wrap{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+  <div class="auth-head">
+    <span class="brand-pulse big"></span>
+    <h1>Open an account</h1>
+    <p class="muted">Start with $100,000 in simulated cash</p>
+  </div>
+
+  {% if form.errors %}
+    <div class="alert">
+      {% for field in form %}{% for error in field.errors %}{{ error }}<br>{% endfor %}{% endfor %}
+      {% for error in form.non_field_errors %}{{ error }}<br>{% endfor %}
+    </div>
+  {% endif %}
+
+  <form method="post" class="auth-form">
+    {% csrf_token %}
+    {% for field in form %}
+      <label>{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<small class="muted">{{ field.help_text|safe }}</small>{% endif %}
+    {% endfor %}
+    <button type="submit" class="btn btn-primary btn-block">Create account &amp; trade</button>
+  </form>
+
+  <p class="auth-alt">Already have an account? <a href="{% url 'login' %}">Sign in</a></p>
+</div>
+{% endblock %}

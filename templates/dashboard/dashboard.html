@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Trading Terminal · MarketPulse{% endblock %}
+{% block main_class %}terminal-page{% endblock %}
+
+{% block content %}
+<div class="ticker" id="ticker"><div class="ticker-loading muted">loading market…</div></div>
+
+<div class="terminal">
+  <!-- Watchlist -->
+  <aside class="panel col-watchlist">
+    <div class="panel-head">Watchlist <span class="muted" id="watchlist-count"></span></div>
+    <div id="watchlist" class="watchlist"></div>
+  </aside>
+
+  <!-- Chart + activity -->
+  <section class="col-main">
+    <div class="panel chart-panel">
+      <div class="chart-head">
+        <div>
+          <div class="chart-symbol">
+            <span id="sel-symbol">—</span>
+            <span id="sel-name" class="muted"></span>
+          </div>
+          <div class="chart-price">
+            <span id="sel-price">—</span>
+            <span id="sel-change" class="chg"></span>
+          </div>
+        </div>
+        <div class="chart-meta">
+          <div><span class="muted">Day High</span><b id="sel-high">—</b></div>
+          <div><span class="muted">Day Low</span><b id="sel-low">—</b></div>
+          <div><span class="muted">Volatility</span><b id="sel-vol">—</b></div>
+        </div>
+      </div>
+      <div class="chart-canvas-wrap">
+        <canvas id="price-chart"></canvas>
+      </div>
+    </div>
+
+    <div class="panel-row">
+      <div class="panel">
+        <div class="panel-head">Open Orders</div>
+        <div id="orders" class="table-wrap"><p class="empty">No open orders.</p></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head">Recent Trades</div>
+        <div id="trades" class="table-wrap"><p class="empty">No trades yet.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ticket + portfolio + leaderboard -->
+  <aside class="col-side">
+    <div class="panel order-ticket">
+      <div class="panel-head">Order Ticket</div>
+      <form id="order-form">
+        <div class="seg" id="side-seg">
+          <button type="button" data-side="BUY" class="seg-btn active">Buy</button>
+          <button type="button" data-side="SELL" class="seg-btn">Sell</button>
+        </div>
+
+        <label>Symbol</label>
+        <input id="ot-symbol" class="form-input" placeholder="AAPL" autocomplete="off">
+
+        <label>Quantity</label>
+        <input id="ot-qty" class="form-input" type="number" min="1" step="1" value="10">
+
+        <div class="seg seg-sm" id="type-seg">
+          <button type="button" data-type="MARKET" class="seg-btn active">Market</button>
+          <button type="button" data-type="LIMIT" class="seg-btn">Limit</button>
+        </div>
+
+        <div id="limit-row" hidden>
+          <label>Limit price</label>
+          <input id="ot-limit" class="form-input" type="number" min="0.01" step="0.01">
+        </div>
+
+        <div class="ot-estimate">
+          <span class="muted">Est. value</span>
+          <span id="ot-est">—</span>
+        </div>
+
+        <button type="submit" id="ot-submit" class="btn btn-buy btn-block">Buy</button>
+        <div id="ot-msg" class="ot-msg"></div>
+      </form>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">Portfolio</div>
+      <div class="port-equity">
+        <div class="port-equity-val" id="pf-equity">—</div>
+        <div class="port-equity-sub">
+          <span id="pf-return" class="chg">—</span>
+          <span class="muted">total return</span>
+        </div>
+      </div>
+      <div class="port-grid">
+        <div><span class="muted">Cash</span><b id="pf-cash">—</b></div>
+        <div><span class="muted">Holdings</span><b id="pf-holdings">—</b></div>
+        <div><span class="muted">Unrealized</span><b id="pf-unrealized" class="chg">—</b></div>
+        <div><span class="muted">Realized</span><b id="pf-realized" class="chg">—</b></div>
+      </div>
+      <div id="holdings" class="table-wrap"><p class="empty">No positions.</p></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">Leaderboard</div>
+      <div id="leaderboard" class="table-wrap"></div>
+    </div>
+  </aside>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/app.js' %}"></script>
+{% endblock %}
