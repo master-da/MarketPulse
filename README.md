@@ -1,8 +1,8 @@
-# MarketPulse — Real-Time Trading Simulator
+# MarketPulse - Real-Time Trading Simulator
 
 A fully self-contained Django demonstration project: a live stock-trading
 simulator with a **backend-heavy architecture** and an **interactive trading
-terminal** frontend. No external services — just SQLite and the standard
+terminal** frontend. No external services - just SQLite and the standard
 library. Everything (market simulation, order matching, bot traders) runs
 in-process from `runserver`.
 
@@ -10,22 +10,22 @@ in-process from `runserver`.
 
 ## What it does
 
-- **Live market engine** — a daemon thread advances every instrument's price
+- **Live market engine** - a daemon thread advances every instrument's price
   on a fixed interval using a Gaussian random walk (with occasional "news"
   spikes), persisting a `PriceTick` time series.
-- **Order-execution engine** — market & limit orders, weighted-average cost
+- **Order-execution engine** - market & limit orders, weighted-average cost
   basis, realized/unrealized P&L, resting limit-order matching, and validation
   (insufficient funds/shares). All trade mutations are serialized with a
   process-wide lock + DB transactions so the background thread and web
   requests never corrupt a balance.
-- **Bot traders** — seeded bot portfolios trade randomly each tick to keep the
+- **Bot traders** - seeded bot portfolios trade randomly each tick to keep the
   tape and leaderboard alive during a demo.
-- **REST API** (Django REST Framework) — instruments, price history, portfolio,
+- **REST API** (Django REST Framework) - instruments, price history, portfolio,
   orders, trades, leaderboard, and a live engine heartbeat.
-- **Interactive terminal UI** — a dark trading dashboard with a custom
+- **Interactive terminal UI** - a dark trading dashboard with a custom
   canvas price chart (no JS libraries / CDNs), a live ticker tape, watchlist,
-  order ticket, portfolio panel, and a leaderboard — all polling the API.
-- **Auth** — login / signup; new users are auto-provisioned a funded portfolio
+  order ticket, portfolio panel, and a leaderboard - all polling the API.
+- **Auth** - login / signup; new users are auto-provisioned a funded portfolio
   via a signal. Full Django admin over every model.
 
 ## Architecture
@@ -83,7 +83,7 @@ DRF's browsable API.
 | GET    | `/api/trades/`                        | Executed trade tape           |
 | GET    | `/api/leaderboard/`                   | Ranked portfolios             |
 
-Example — place a market buy:
+Example - place a market buy:
 
 ```bash
 curl -X POST http://127.0.0.1:8000/api/orders/ \
@@ -96,7 +96,7 @@ curl -X POST http://127.0.0.1:8000/api/orders/ \
 - **SQLite in WAL mode** (`PRAGMA journal_mode=WAL`) so the engine thread can
   write ticks while requests read concurrently; `busy_timeout` smooths
   contention.
-- **Engine autostart guard** — the simulation only launches in the live
+- **Engine autostart guard** - the simulation only launches in the live
   `runserver` worker (`RUN_MAIN == "true"`), never the autoreload watcher or
   during management commands.
 - **Decimal money** everywhere persisted; float only inside the random walk,
